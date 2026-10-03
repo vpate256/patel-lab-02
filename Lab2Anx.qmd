@@ -1,0 +1,365 @@
+---
+title: "lab2"
+format: html
+editor: visual
+---
+```{r}
+#| include: false
+
+library(tidyverse)
+library(psych)
+library(readxl)
+library(gt)
+library(janitor)
+
+# --------------------------------------------------
+# LOAD DATA
+# --------------------------------------------------
+
+data <- read_excel("./Attachment_Anxiety_Data.xlsx")
+
+# --------------------------------------------------
+# CLEAN DATA
+# --------------------------------------------------
+
+anx.clean <- data |>
+  mutate(
+    Gender = case_when(
+      Gender == 1 ~ "Male",
+      Gender == 2 ~ "Female",
+      TRUE ~ NA_character_
+    )
+  ) |> 
+  mutate(
+    Ethnicity = case_when(
+      Ethnicity == 1 ~ "White/Caucasian",
+      Ethnicity == 2 ~ "Asian/Asian British",
+      Ethnicity == 5 ~ "Other ethnic group",
+      Ethnicity == 6 ~ "Prefer not to say",
+      TRUE ~ NA_character_
+    )
+  )
+
+# Convert survey responses to integers
+anx.clean <- anx.clean |>
+  mutate(
+    across(
+      c(
+        starts_with("SA_"),
+        starts_with("AA_"),
+        starts_with("SEst_")
+      ),
+      as.integer
+    )
+  )
+
+# --------------------------------------------------
+# CREATE ANSWER KEYS
+# --------------------------------------------------
+
+SA.keys <- list(
+  SocialAnxiety = c(
+    "SA_1", "SA_2", "SA_3", "SA_4", "-SA_5",
+    "SA_6", "SA_7", "SA_8", "-SA_9", "SA_10",
+    "-SA_11", "SA_12", "SA_13", "SA_14", "SA_15",
+    "SA_16", "SA_17", "SA_18", "SA_19", "SA_20"
+  )
+)
+
+AA.keys <- list(
+  AttachmentAnxiety = c(
+    "AA_1", "AA_2", "AA_3", "AA_4", "AA_5",
+    "AA_6", "AA_7", "AA_8", "AA_9"
+  )
+)
+
+SEst.keys <- list(
+  SelfEsteem = c(
+    "SEst_1", "-SEst_2", "SEst_3", "SEst_4", "-SEst_5",
+    "-SEst_6", "SEst_7", "-SEst_8", "-SEst_9", "SEst_10"
+  )
+)
+
+# --------------------------------------------------
+# SCORE SCALES
+# --------------------------------------------------
+
+SA.scores <- scoreItems(
+  SA.keys,
+  anx.clean,
+  totals = FALSE,
+  min = 0,
+  max = 4
+)
+
+SA.scores.df <- as.data.frame(SA.scores$scores)
+
+
+AA.scores <- scoreItems(
+  AA.keys,
+  anx.clean,
+  totals = FALSE,
+  min = 1,
+  max = 7
+)
+
+AA.scores.df <- as.data.frame(AA.scores$scores)
+
+
+SEst.scores <- scoreItems(
+  SEst.keys,
+  anx.clean,
+  totals = FALSE,
+  min = 1,
+  max = 4
+)
+
+SEst.scores.df <- as.data.frame(SEst.scores$scores)
+
+
+# Combine scale scores
+allscores.df <- cbind(
+  SA.scores.df,
+  AA.scores.df,
+  SEst.scores.df
+)
+
+anx.clean <- cbind(
+  anx.clean,
+  allscores.df
+)
+
+# Keep variables of interest
+anx.final <- anx.clean |>
+  select(
+    Gender,
+    Ethnicity,
+    SocialAnxiety,
+    AttachmentAnxiety,
+    SelfEsteem
+  ) |>
+  mutate_if(is.numeric, round, 2)
+
+# --------------------------------------------------
+# PART 3: DEMOGRAPHIC TABLE
+# --------------------------------------------------
+
+demographictable <- anx.final |>
+  tabyl(Ethnicity, Gender)
+
+gttable.1 <- demographictable |>
+  gt() |>
+  tab_header(
+    title = md("*Distribution of Gender by Ethnicity*")
+  )
+
+# --------------------------------------------------
+# FULL-SAMPLE SCORE TABLE
+# --------------------------------------------------
+
+alphas <- round(c(
+  SA.scores$alpha,
+  AA.scores$alpha,
+  SEst.scores$alpha
+), 2)
+
+summary <- describe(
+  select(
+    anx.final,
+    SocialAnxiety,
+    AttachmentAnxiety,
+    SelfEsteem
+  )
+)
+
+# Sample size
+n <- nrow(anx.final)
+
+# Scale labels
+Scales <- c(
+  "Social Interaction Anxiety Scale",
+  "Experiences in Close Relationships Anxiety Subscale",
+  "Rosenberg Self-Esteem Scale"
+)
+
+summary$Scales <- Scales
+
+summary <- summary |>
+  select(
+    Scales,
+    mean,
+    median,
+    sd,
+    range
+  ) |>
+  mutate_if(is.numeric, round, 2)
+
+alphas.df <- data.frame(
+  alpha = alphas
+)
+
+final.reptable <- cbind(
+  summary,
+  alphas.df
+)
+
+gttable.2 <- final.reptable |>
+  gt() |>
+  tab_header(
+    title = md("*Descriptive Statistics and Reliability for Anxiety and Self-Esteem Scales*"),
+    subtitle = paste0("N = ", n)
+  ) |>
+  tab_spanner(
+    label = "Central Tendency",
+    columns = c(mean, median)
+  ) |>
+  tab_spanner(
+    label = "Variability",
+    columns = c(sd, range)
+  ) |>
+  tab_spanner(
+    label = "Reliability",
+    columns = c(alpha)
+  )
+
+# --------------------------------------------------
+# FILTER TO FEMALE PARTICIPANTS
+# --------------------------------------------------
+
+anx.filtered <- anx.final |>
+  filter(Gender == "Female")
+
+# Recalculate reliability for female participants
+
+SA.scores.filtered <- scoreItems(
+  SA.keys,
+  anx.clean |> filter(Gender == "Female"),
+  totals = FALSE,
+  min = 0,
+  max = 4
+)
+
+AA.scores.filtered <- scoreItems(
+  AA.keys,
+  anx.clean |> filter(Gender == "Female"),
+  totals = FALSE,
+  min = 1,
+  max = 7
+)
+
+SEst.scores.filtered <- scoreItems(
+  SEst.keys,
+  anx.clean |> filter(Gender == "Female"),
+  totals = FALSE,
+  min = 1,
+  max = 4
+)
+
+alphas_filtered <- round(c(
+  SA.scores.filtered$alpha,
+  AA.scores.filtered$alpha,
+  SEst.scores.filtered$alpha
+), 2)
+
+# Female-only descriptive statistics
+summary_filtered <- describe(
+  select(
+    anx.filtered,
+    SocialAnxiety,
+    AttachmentAnxiety,
+    SelfEsteem
+  )
+)
+
+# Female sample size
+n_filtered <- nrow(anx.filtered)
+
+summary_filtered$Scales <- c(
+  "Social Interaction Anxiety Scale",
+  "Experiences in Close Relationships Anxiety Subscale",
+  "Rosenberg Self-Esteem Scale"
+)
+
+summary_filtered <- summary_filtered |>
+  select(
+    Scales,
+    mean,
+    median,
+    sd,
+    range
+  ) |>
+  mutate_if(is.numeric, round, 2)
+
+alphas_filtered.df <- data.frame(
+  alpha = alphas_filtered
+)
+
+filtered.reptable <- cbind(
+  summary_filtered,
+  alphas_filtered.df
+)
+
+gttable.3 <- filtered.reptable |>
+  gt() |>
+  tab_header(
+    title = md("*Descriptive Statistics and Reliability for Female Participants*"),
+    subtitle = paste0("N = ", n_filtered)
+  ) |>
+  tab_spanner(
+    label = "Central Tendency",
+    columns = c(mean, median)
+  ) |>
+  tab_spanner(
+    label = "Variability",
+    columns = c(sd, range)
+  ) |>
+  tab_spanner(
+    label = "Reliability (Cronbach's alpha)",
+    columns = c(alpha)
+  )
+```
+
+## Intro
+
+The present dataset contains measures of social interaction anxiety, attachment-related anxiety, and self-esteem. The analyses summarized participant demographic characteristics, calculated average scores for each scale, examined the internal consistency of the scales, and compared descriptive statistics for the full sample and for female participants.
+
+## Methods
+
+### Participants
+
+The full sample consisted of `{r} n` participants. Participants reported their gender and ethnicity. The distribution of gender across ethnicity categories is presented in Table 1.
+
+`{r} gttable.1`
+
+### Measures
+
+The **Social Interaction Anxiety Scale** measured anxiety associated with social interactions. The scale demonstrated a Cronbach's alpha of `{r} alphas[1]`.
+
+The **Experiences in Close Relationships Anxiety Subscale** measured attachment-related anxiety. The scale demonstrated a Cronbach's alpha of `{r} alphas[2]`.
+
+The **Rosenberg Self-Esteem Scale** measured self-esteem. The scale demonstrated a Cronbach's alpha of `{r} alphas[3]`.
+
+### Data Analysis Strategy
+
+Scale scores were calculated using the `scoreItems()` function from the `psych` package. Average item scores were calculated rather than total scores.
+
+For the Social Interaction Anxiety Scale, items 5, 9, and 11 were reverse keyed. For the Rosenberg Self-Esteem Scale, items 2, 5, 6, 8, and 9 were reverse keyed. No items were reverse keyed for the Experiences in Close Relationships Anxiety Subscale.
+
+The Social Interaction Anxiety Scale used a response range from 0 to 4, the Experiences in Close Relationships Anxiety Subscale used a response range from 1 to 7, and the Rosenberg Self-Esteem Scale used a response range from 1 to 4.
+
+Descriptive statistics and Cronbach's alpha were first calculated for the full sample. The data were then filtered to include only female participants, and the descriptive statistics and reliability estimates were recalculated for this subgroup.
+
+## Results
+
+Descriptive statistics and reliability estimates for the full sample are presented below.
+
+`{r} gttable.2`
+
+For the full sample, the mean Social Interaction Anxiety Scale score was `{r} final.reptable$mean[1]`, the mean Experiences in Close Relationships Anxiety Subscale score was `{r} final.reptable$mean[2]`, and the mean Rosenberg Self-Esteem Scale score was `{r} final.reptable$mean[3]`.
+
+The filtered sample consisted of `{r} n_filtered` female participants. Descriptive statistics and reliability estimates for this subgroup are presented below.
+
+`{r} gttable.3`
+
+Among female participants, the mean Social Interaction Anxiety Scale score was `{r} filtered.reptable$mean[1]`, the mean Experiences in Close Relationships Anxiety Subscale score was `{r} filtered.reptable$mean[2]`, and the mean Rosenberg Self-Esteem Scale score was `{r} filtered.reptable$mean[3]`.
+---

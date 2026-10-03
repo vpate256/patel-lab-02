@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "Lab2Anx.html",
+    "href": "Lab2Anx.html",
+    "title": "lab2",
+    "section": "",
+    "text": "The present dataset contains measures of social interaction anxiety, attachment-related anxiety, and self-esteem. The analyses summarized participant demographic characteristics, calculated average scores for each scale, examined the internal consistency of the scales, and compared descriptive statistics for the full sample and for female participants."
+  },
+  {
+    "objectID": "Lab2Anx.html#intro",
+    "href": "Lab2Anx.html#intro",
+    "title": "lab2",
+    "section": "",
+    "text": "The present dataset contains measures of social interaction anxiety, attachment-related anxiety, and self-esteem. The analyses summarized participant demographic characteristics, calculated average scores for each scale, examined the internal consistency of the scales, and compared descriptive statistics for the full sample and for female participants."
+  },
+  {
+    "objectID": "Lab2Anx.html#methods",
+    "href": "Lab2Anx.html#methods",
+    "title": "lab2",
+    "section": "Methods",
+    "text": "Methods\n\nParticipants\nThe full sample consisted of 63 participants. Participants reported their gender and ethnicity. The distribution of gender across ethnicity categories is presented in Table 1.\n\n\n\n\n\n\nDistribution of Gender by Ethnicity\n\n\nEthnicity\nFemale\nMale\n\n\n\n\nAsian/Asian British\n32\n6\n\n\nOther ethnic group\n0\n1\n\n\nPrefer not to say\n1\n0\n\n\nWhite/Caucasian\n17\n6\n\n\n\n\n\n\n\nMeasures\nThe Social Interaction Anxiety Scale measured anxiety associated with social interactions. The scale demonstrated a Cronbach’s alpha of 0.9.\nThe Experiences in Close Relationships Anxiety Subscale measured attachment-related anxiety. The scale demonstrated a Cronbach’s alpha of 0.94.\nThe Rosenberg Self-Esteem Scale measured self-esteem. The scale demonstrated a Cronbach’s alpha of 0.85.\n\n\nData Analysis Strategy\nScale scores were calculated using the scoreItems() function from the psych package. Average item scores were calculated rather than total scores.\nFor the Social Interaction Anxiety Scale, items 5, 9, and 11 were reverse keyed. For the Rosenberg Self-Esteem Scale, items 2, 5, 6, 8, and 9 were reverse keyed. No items were reverse keyed for the Experiences in Close Relationships Anxiety Subscale.\nThe Social Interaction Anxiety Scale used a response range from 0 to 4, the Experiences in Close Relationships Anxiety Subscale used a response range from 1 to 7, and the Rosenberg Self-Esteem Scale used a response range from 1 to 4.\nDescriptive statistics and Cronbach’s alpha were first calculated for the full sample. The data were then filtered to include only female participants, and the descriptive statistics and reliability estimates were recalculated for this subgroup."
+  },
+  {
+    "objectID": "Lab2Anx.html#results",
+    "href": "Lab2Anx.html#results",
+    "title": "lab2",
+    "section": "Results",
+    "text": "Results\nDescriptive statistics and reliability estimates for the full sample are presented below.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescriptive Statistics and Reliability for Anxiety and Self-Esteem Scales\n\n\nN = 63\n\n\nScales\n\nCentral Tendency\n\n\nVariability\n\n\nReliability\n\n\n\nmean\nmedian\nsd\nrange\nalpha\n\n\n\n\nSocial Interaction Anxiety Scale\n2.39\n2.30\n0.70\n3.00\n0.90\n\n\nExperiences in Close Relationships Anxiety Subscale\n3.40\n3.11\n1.62\n5.89\n0.94\n\n\nRosenberg Self-Esteem Scale\n2.23\n2.20\n0.51\n2.20\n0.85\n\n\n\n\n\nFor the full sample, the mean Social Interaction Anxiety Scale score was 2.39, the mean Experiences in Close Relationships Anxiety Subscale score was 3.4, and the mean Rosenberg Self-Esteem Scale score was 2.23.\nThe filtered sample consisted of 50 female participants. Descriptive statistics and reliability estimates for this subgroup are presented below.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDescriptive Statistics and Reliability for Female Participants\n\n\nN = 50\n\n\nScales\n\nCentral Tendency\n\n\nVariability\n\n\nReliability (Cronbach's alpha)\n\n\n\nmean\nmedian\nsd\nrange\nalpha\n\n\n\n\nSocial Interaction Anxiety Scale\n2.44\n2.38\n0.72\n3.00\n0.90\n\n\nExperiences in Close Relationships Anxiety Subscale\n3.43\n3.11\n1.71\n5.89\n0.94\n\n\nRosenberg Self-Esteem Scale\n2.24\n2.20\n0.53\n2.20\n0.86"
+  },
+  {
+    "objectID": "Lab2Anx.html#among-female-participants-the-mean-social-interaction-anxiety-scale-score-was-2.44-the-mean-experiences-in-close-relationships-anxiety-subscale-score-was-3.43-and-the-mean-rosenberg-self-esteem-scale-score-was-2.24.",
+    "href": "Lab2Anx.html#among-female-participants-the-mean-social-interaction-anxiety-scale-score-was-2.44-the-mean-experiences-in-close-relationships-anxiety-subscale-score-was-3.43-and-the-mean-rosenberg-self-esteem-scale-score-was-2.24.",
+    "title": "lab2",
+    "section": "Among female participants, the mean Social Interaction Anxiety Scale score was 2.44, the mean Experiences in Close Relationships Anxiety Subscale score was 3.43, and the mean Rosenberg Self-Esteem Scale score was 2.24.",
+    "text": "Among female participants, the mean Social Interaction Anxiety Scale score was 2.44, the mean Experiences in Close Relationships Anxiety Subscale score was 3.43, and the mean Rosenberg Self-Esteem Scale score was 2.24."
+  }
+]

@@ -1,0 +1,16 @@
+---
+title: "9041 Assignment 2"
+author: Selena Esteves
+date: today
+format: 
+    html:
+      toc: true
+      code-fold: true
+      code-summary: "Show code"
+      df-print: paged
+execute:
+    echo: false
+    warning: false
+---
+
+
